@@ -29,6 +29,16 @@ class AlbumsHandlers {
       },
     });
   }
+
+  async putAlbumByIdHandler({ params, payload }, h) {
+    await this._services.verifyAlbumId(params.id);
+    this._validator.validateAlbumPayload(payload);
+    await this._services.editAlbumById({ id: params.id, ...payload });
+    return h.response({
+      status: 'success',
+      message: 'the album been edited!',
+    });
+  }
 }
 
 module.exports = AlbumsHandlers;
