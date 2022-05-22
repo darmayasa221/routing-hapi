@@ -36,6 +36,18 @@ class AlbumsServices {
     return rows[0];
   }
 
+  async getSongsByAlbumId(id) {
+    const query = {
+      text: `SELECT songs.id, songs.title, songs.performer
+      FROM albums
+      LEFT JOIN songs
+      ON songs.album_id = $1`,
+      values: [id],
+    };
+    const { rows } = await this._pool.query(query);
+    return rows;
+  }
+
   async editAlbumById(payload) {
     const {
       id,
