@@ -68,7 +68,7 @@ class SongsServices {
     }
   }
 
-  async deleteSongByid(id) {
+  async deleteSongById(id) {
     const query = {
       text: `DELETE FROM songs
       WHERE id = $1`,

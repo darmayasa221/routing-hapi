@@ -7,6 +7,7 @@ class SongsHandlers {
     this.getSongsHandler = this.getSongsHandler.bind(this);
     this.getSongByIdHandler = this.getSongByIdHandler.bind(this);
     this.putSongByIdHandler = this.putSongByIdHandler.bind(this);
+    this.deleteSongByIdHandler = this.deleteSongByIdHandler.bind(this);
   }
 
   async postSongHandler({ payload }, h) {
@@ -49,7 +50,16 @@ class SongsHandlers {
     await this._services.editSongById({ id: params.id, ...payload });
     return h.response({
       status: 'success',
-      message: 'song been edited',
+      message: 'song been edited!',
+    });
+  }
+
+  async deleteSongByIdHandler({ params }, h) {
+    await this._services.verifySongId(params.id);
+    await this._services.deleteSongById(params.id);
+    return h.response({
+      status: 'success',
+      message: 'song been deleted!',
     });
   }
 }
