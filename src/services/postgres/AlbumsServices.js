@@ -1,5 +1,6 @@
 const { nanoid } = require('nanoid');
 const { Pool } = require('pg');
+const InvariantError = require('../../exceptions/InvariantError');
 const NotFoundError = require('../../exceptions/NotFoundError');
 
 class AlbumsServices {
@@ -18,7 +19,10 @@ class AlbumsServices {
       VALUES ($1, $2, $3) RETRUNING id`,
       values: [id, name, year],
     };
-    const { rows } = await this._pool.query(query);
+    const { rows, rowCount } = await this._pool.query(query);
+    if (!rowCount) {
+      throw new InvariantError('failed to added album');
+    }
     return rows[0].id;
   }
 
@@ -44,7 +48,10 @@ class AlbumsServices {
       WHERE id = $3`,
       values: [name, year, id],
     };
-    await this._pool.query(query);
+    const { rowCount } = await this._pool.query(query);
+    if (!rowCount) {
+      throw new InvariantError('failed to edited album');
+    }
   }
 
   async deleteAlbumById(id) {
