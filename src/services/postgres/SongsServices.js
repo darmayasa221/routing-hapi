@@ -36,6 +36,26 @@ class SongsServices {
     return rows;
   }
 
+  async getSongByTitle(title) {
+    const query = {
+      text: `SELECT * FROM songs
+      WHERE title = $1`,
+      values: [title],
+    };
+    const { rows } = await this._pool.query(query);
+    return rows;
+  }
+
+  async getSongByPerformer(performer) {
+    const query = {
+      text: `SELECT * FROM songs
+      WHERE performer = $1`,
+      values: [performer],
+    };
+    const { rows } = await this._pool.query(query);
+    return rows;
+  }
+
   async getSongById(id) {
     const query = {
       text: `SELECT * FROM songs
