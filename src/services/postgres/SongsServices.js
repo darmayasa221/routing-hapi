@@ -17,12 +17,13 @@ class SongsServices {
       duration,
       albumId,
     } = payload;
-    const id = `songs-${nanoid()}`;
+    const id = `song-${nanoid()}`;
     const query = {
       text: `INSERT INTO songs
-      VALUES ($1, $2, $3, $4, $5, $6, $7) RETRUNING id`,
+      VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
       values: [id, title, year, genre, performer, duration, albumId],
     };
+
     const { rows, rowCount } = await this._pool.query(query);
     if (!rowCount) {
       throw new InvariantError('failed to add song!');
@@ -32,26 +33,6 @@ class SongsServices {
 
   async getSongs() {
     const query = 'SELECT id, title, performer FROM songs';
-    const { rows } = await this._pool.query(query);
-    return rows;
-  }
-
-  async getSongByTitle(title) {
-    const query = {
-      text: `SELECT * FROM songs
-      WHERE title = $1`,
-      values: [title],
-    };
-    const { rows } = await this._pool.query(query);
-    return rows;
-  }
-
-  async getSongByPerformer(performer) {
-    const query = {
-      text: `SELECT * FROM songs
-      WHERE performer = $1`,
-      values: [performer],
-    };
     const { rows } = await this._pool.query(query);
     return rows;
   }

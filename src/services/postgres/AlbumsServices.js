@@ -13,10 +13,10 @@ class AlbumsServices {
       name,
       year,
     } = payload;
-    const id = `albums-${nanoid()}`;
+    const id = `album-${nanoid()}`;
     const query = {
       text: `INSERT INTO albums
-      VALUES ($1, $2, $3) RETRUNING id`,
+      VALUES($1, $2, $3) RETURNING id`,
       values: [id, name, year],
     };
     const { rows, rowCount } = await this._pool.query(query);
@@ -34,18 +34,6 @@ class AlbumsServices {
     };
     const { rows } = await this._pool.query(query);
     return rows[0];
-  }
-
-  async getSongsByAlbumId(id) {
-    const query = {
-      text: `SELECT songs.id, songs.title, songs.performer
-      FROM albums
-      LEFT JOIN songs
-      ON songs.album_id = $1`,
-      values: [id],
-    };
-    const { rows } = await this._pool.query(query);
-    return rows;
   }
 
   async editAlbumById(payload) {

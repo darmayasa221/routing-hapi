@@ -3,8 +3,8 @@ const routes = require('./routes');
 
 module.exports = {
   name: 'songs',
-  register: async (server, { services, validator }) => {
-    const songsHandlers = new SongsHadlers(services, validator);
-    server.routes(routes(songsHandlers));
+  register: async (server, { servicesSongs, validator, servicesAlbums }) => {
+    const songsHandlers = new SongsHadlers(servicesSongs, validator, servicesAlbums);
+    server.route(routes(songsHandlers));
   },
 };

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 // routes
 const albums = require('./api/albums/index');
@@ -29,8 +30,9 @@ const init = async () => {
     {
       plugin: songs,
       options: {
-        services: songsServices,
+        servicesSongs: songsServices,
         validator: SongsValidator,
+        servicesAlbums: AlbumsServices,
       },
     },
   ]);
