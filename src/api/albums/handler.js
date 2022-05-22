@@ -4,6 +4,10 @@ class AlbumsHandlers {
     this._validator = validator;
 
     this.postAlbumHandler = this.postAlbumHandler.bind(this);
+    this.getAlbumHandler = this.getAlbumHandler.bind(this);
+    this.putAlbumByIdHandler = this.putAlbumByIdHandler.bind(this);
+    this.deleteAlbumByIdHandler = this.deleteAlbumByIdHandler.bind(this);
+    this.getSongByAlbumIdHandler = this.getSongByAlbumIdHandler.bind(this);
   }
 
   async postAlbumHandler({ payload }, h) {
@@ -46,6 +50,17 @@ class AlbumsHandlers {
     return h.response({
       status: 'success',
       message: 'the album been deleted!',
+    });
+  }
+
+  async getSongByAlbumIdHandler({ params }, h) {
+    await this._services.verifyAlbumId(params.albumId);
+    const result = await this._services.getSongByAlbumId(params.albumId);
+    return h.response({
+      status: 'success',
+      data: {
+        result,
+      },
     });
   }
 }

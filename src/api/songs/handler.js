@@ -23,7 +23,25 @@ class SongsHandlers {
     return response;
   }
 
-  async getSongsHandler(request, h) {
+  async getSongsHandler({ query }, h) {
+    if (query) {
+      if (query.title) {
+        const songsByTitle = await this._services.getSongByTitle(query.title);
+        return h.response({
+          status: 'success',
+          data: {
+            songs: songsByTitle,
+          },
+        });
+      }
+      const songsByPerformer = await this._services.getSongByPerformer(query.performer);
+      return h.response({
+        status: 'success',
+        data: {
+          songs: songsByPerformer,
+        },
+      });
+    }
     const songs = await this._services.getSongs();
     return h.response({
       status: 'success',
