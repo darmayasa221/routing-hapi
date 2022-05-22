@@ -39,6 +39,15 @@ class AlbumsHandlers {
       message: 'the album been edited!',
     });
   }
+
+  async deleteAlbumByIdHandler({ params }, h) {
+    await this._services.verifyAlbumId(params.id);
+    await this._services.deleteAlbumById(params.id);
+    return h.response({
+      status: 'success',
+      message: 'the album been deleted!',
+    });
+  }
 }
 
 module.exports = AlbumsHandlers;
