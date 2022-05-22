@@ -1,6 +1,6 @@
 class AlbumsHandlers {
-  constructor(service, validator) {
-    this._service = service;
+  constructor(services, validator) {
+    this._services = services;
     this._validator = validator;
 
     this.postAlbumHandler = this.postAlbumHandler.bind(this);
@@ -8,15 +8,26 @@ class AlbumsHandlers {
 
   async postAlbumHandler({ payload }, h) {
     this._validator.validateAlbumPayload(payload);
-    const album = await this._service.addAlbum(payload);
+    const id = await this._services.addAlbum(payload);
     const response = h.respons({
+      status: 'success',
+      data: {
+        albumid: id,
+      },
+    });
+    response.code(201);
+    return response;
+  }
+
+  async getAlbumHandler({ params }, h) {
+    await this._services.verifyAlbumId(params.id);
+    const album = await this._services.getAlbum(params.id);
+    return h.response({
       status: 'success',
       data: {
         album,
       },
     });
-    response.code(201);
-    return response;
   }
 }
 
